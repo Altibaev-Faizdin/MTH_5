@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^zeaqkjmwt3al98^4k(rwws9$0499d7=0x%s0dg$s!dn_qicn9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'testserver']
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'films',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +51,23 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'querycount.middleware.QueryCountMiddleware',
 ]
+
+
+QUERYCOUNT = {
+    'THRESHOLDS': {
+        'MEDIUM': 50,
+        'HIGH': 200,
+        'MIN_TIME_TO_LOG':0,
+        'MIN_QUERY_COUNT_TO_LOG':0
+    },
+    'IGNORE_REQUEST_PATTERNS': [],
+    'IGNORE_SQL_PATTERNS': [],
+    'DISPLAY_DUPLICATES': None,
+    'RESPONSE_HEADER': 'X-DjangoQueryCount-Count'
+}
+
 
 ROOT_URLCONF = 'chinema_project.urls'
 
@@ -117,3 +135,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+# REST Framework configuration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
